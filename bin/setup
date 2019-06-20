@@ -1,0 +1,18 @@
+# Add script to:
+# * Install dependencies
+# * Build/Compile
+# * Run Test Suit to validate
+#
+# After this is run, bin/parking_lot
+# should Just Work.
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
+
+co=$(python3 $DIR/../main.py create_parking_lot 6)
+#co=$(python3 $DIR/../app_test.py 1>&1)
+
+
+echo "Outout is $co"
+
+
+#cmd_output=$(rm "$file" 2>&1)
+#cmd_output=$(python main.py create_parking_lot 6 2>&1)
