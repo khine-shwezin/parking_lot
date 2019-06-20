@@ -1,12 +1,10 @@
 import sys
 import os
-import subprocess
 
 arg = sys.argv
 cmdList = arg
-cmd = ""
 del cmdList[0]
-cmd=" ".join(cmdList)
+cmd = " ".join(cmdList)
 
 class Parking:
   def __init__(self):
@@ -14,7 +12,7 @@ class Parking:
     self.main_parking = []
     self.parkingLog = []
     self.freeIndex = 0
-    
+
   def park(self, ticket):
     if int(self.numberOfSlots) > int(self.freeIndex):
       self.updateHistory(ticket)
@@ -25,25 +23,25 @@ class Parking:
 
   def updateHistory(self, ticket):
     self.parkingLog.append(ticket)
-  
+
   def updateParking(self,ticket):
     parkInd =ParkingJob.findNearestSlot() - 1
     self.main_parking[parkInd] = ticket
     self.freeIndex = self.freeIndex + 1
-    
+
   def removeSlot(self,slotNumber):
     slotNum = int(slotNumber) - 1
     self.main_parking[slotNum] = None
     self.freeIndex = self.freeIndex-1
     print("Slot number",slotNumber,"is free")
-    
+
   def getTotalSlots(self):
     return self.main_parking
-    
+
   def setSlots(self, n):
-    self.numberOfSlots = n
+    self.numberOfSlots = int(n)
     self.main_parking = [None]* int(n)
-    print("Created a parking lot with",n,"slots")
+    print("Created a parking lot with",str(n),"slots")
 
   def getStatus(self):
     header = "Slot No.    Registration No    Colour"
@@ -85,8 +83,8 @@ class Parking:
       print("Not found")
     else:
       result = sorted(result)
-      print(", ".join(result))   
-   
+      print(", ".join(result))
+
   def findNearestSlot(self):
     p = self.main_parking
     freeSlot = None
@@ -95,18 +93,18 @@ class Parking:
         freeSlot = p.index(n) + 1
         break
     return freeSlot
-      
+
 class Ticket:
   def __init__(self):
     self.tId = 0
     self.regNum = 0
     self.color = 0
-    
+
   def createTicket(self,slotNum, regNum, color ):
     self.tId = slotNum
     self.regNum = regNum
     self.color = color
-  
+
 def parkInSlot(cmdData):
   tic = Ticket()
   slotNum = ParkingJob.findNearestSlot()
@@ -114,32 +112,33 @@ def parkInSlot(cmdData):
   color = cmdData[1]
   tic.createTicket(slotNum, regNum, color)
   ParkingJob.park(tic)
-  
+
 def leaveSlot(cmd):
   ParkingJob.removeSlot(cmd[0])
 
 def getStatus():
   ParkingJob.getStatus()
-  
+
 def createParkingLot(cmd):
   global ParkingJob
   ParkingJob = Parking()
-  ParkingJob.setSlots(cmd[0])
+  ParkingJob.setSlots(str(cmd[0]))
+  return ParkingJob
 
 def searchRegNumByColor(color):
   ParkingJob.getRegNumByColor(color)
 
 def searchSlotNumByColor(color):
   ParkingJob.getSlotNumByColor(color)
-  
+
 def searchSlotNumByRegNum(regNum):
   ParkingJob.getSlotNumByRegNum(regNum)
-  
+
 def decide(cmd, loop):
   cmdData = cmd.strip().split(" ")
   cmdMain = cmdData[0]
-
   del cmdData[0]
+
   if (cmdMain == "status"):
     getStatus()
   if (cmdMain == "park"):
@@ -184,7 +183,8 @@ def wLoop():
       exit()
     else:
       decide(iCmd,wLoop)
-  
+
+# Entry Point
 if cmd == ".":
   wLoop()
 
@@ -203,14 +203,3 @@ if ".txt" in cmd:
     decide(d, None)
 else:
   decide(cmd, wLoop)
-
-  
- 
-      
-        
-    
-    
-    
-      
-
-  
